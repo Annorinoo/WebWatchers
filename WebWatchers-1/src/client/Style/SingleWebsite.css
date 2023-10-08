@@ -1,0 +1,43 @@
+/* SingleWebsite.css */
+
+/* Container for the entire content */
+.single-website-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Styling for the website icon */
+  .website-icon {
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Maintain aspect ratio for images */
+    border-radius: 50%; /* Creates a circular shape for the icon */
+  }
+  
+  /* Styling for the website name */
+  h1 {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+  
+  /* Styling for the website description */
+  .website-description {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  /* Styling for the clickable "URL" link */
+  .website-url {
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff; /* Link color (blue) */
+  }
+  
+  /* Hover effect for the clickable "URL" link */
+  .website-url:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  

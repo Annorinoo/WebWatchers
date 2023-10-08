@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Phudu:wght@300&display=swap");
+
+.panel{
+    background-color: rgb(248, 250, 131);
+    display:block;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 15px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    max-width: 30%;
+    max-height: 40%;
+    
+}
+
+.panel:hover{
+}
+
+.Header{
+    font-family: "Merriweather", serif;
+    justify-content: center;
+    margin-top: 3px;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+
+}
+
+#Center{
+    margin: 10px auto;
+    width: 50%;
+    padding: 10px;
+}
+
+#CenterText{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.LoginBox{
+    flex-direction: column;
+    padding: 5px;
+    border-width: 10px;
+    border-color: rgb(248, 250, 131);
+    border-radius: 5%;
+    border-left: 10%;
+    border-right: 10%;
+    background-color: rgb(248, 250, 131);
+    display:block;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    width: 75%;
+    height: 50%;
+}
+
+.LoginBox:hover{
+    filter:saturate(2);
+}
+
+input[type="text"],
+input[type="password"] {
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  width: 50%;
+  padding: 3px;
+  align-items: center;
+}
+
+.submitButton{
+    margin-top: 3vh;
+    width: 25%;
+    height: 3vh;
+    border: 10px rgb(255, 255, 255);
+    color: black;
+    text-align: center;
+    align-content: center;
+}
