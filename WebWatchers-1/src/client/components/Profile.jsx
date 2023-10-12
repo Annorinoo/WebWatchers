@@ -8,23 +8,6 @@ export default function Profile() {
   const [id, setId] = useState('');
   const [reviews, setReviews] = useState([]); // Initialize reviews state
 
-    // useEffect(() => {
-    //     if (token) {
-    //         try {
-    //             const decodedToken = jwt_decode(token);
-
-    //             console.log(decodedToken);
-
-    //             setUsername(decodedToken.username);
-    //             setId(decodedToken.id)
-
-    //         } catch (error) {
-    //             console.error("Error decoding token:", error);
-
-    //         }
-    //     }
-    // }, [token]);
-
   useEffect(() => {
     if (token) {
       try {
@@ -33,7 +16,7 @@ export default function Profile() {
         // Fetch all reviews and then filter based on the user's ID
         setUsername(decodedToken.username);
         setId(decodedToken.id);
-        
+
         fetchAllReviews()
           .then((allReviews) => {
             const filteredReviews = allReviews.reviews.filter(
@@ -76,7 +59,7 @@ export default function Profile() {
     <div className="panel">
       <h1>Welcome {username}!</h1>
       <h2>Your current id is {id}!</h2>
-      <div className="single-website-container">
+      <div className="filtered-reviews-container">
         {renderReviews()}
       </div>
     </div>
