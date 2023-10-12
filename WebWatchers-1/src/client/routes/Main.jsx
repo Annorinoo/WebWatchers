@@ -11,6 +11,7 @@ import AdminLogin from '../components/AdminLogin';
 import AdminWebsites from '../components/AdminWebsites';
 import AdminUsers from '../components/AdminUsers';
 import AdminCreateWebsite from '../components/AdminCreateWebsite';
+import Profile from './Profile';
 
 export default function Main({
   setLoggedIn,
@@ -27,6 +28,7 @@ export default function Main({
         <Route path="login" element={<Login setLoggedIn={setLoggedIn} setUser={setUser} />} />
         <Route path="register" element={<Register setLoggedIn={setLoggedIn} setUser={setUser} />} />
         <Route path="websites" element={<WebsiteListings />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="websites/:id" element={<SingleWebsite />} />
         <Route path="reviews" element={<Reviews setLoggedIn={setLoggedIn} setUser={setUser} />} />
         <Route path="admin/login" element={<AdminLogin setAdminLoggedIn={setAdminLoggedIn} setUser={setUser} />} />

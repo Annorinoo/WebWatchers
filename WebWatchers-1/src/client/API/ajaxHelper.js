@@ -51,6 +51,19 @@ export async function fetchAllAdminUsers() {
   }
 }
 
+export async function fetchUserById(userId) {
+  try {
+    const response = await fetch(`${BASE_URL}/users/${userId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data = await response.json();
+    return data.user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchMyData() {
   try {
       const response = await fetch(`${BASE_URL}/users/:id`, {
@@ -233,6 +246,20 @@ export async function fetchSingleReview(reviewId) {
     console.error('Trouble fetching the review!', error);
   }
 };
+
+export async function fetchReviewsByAuthorId(authorId) {
+  try {
+      // Make a request to your API to fetch reviews by authorId
+      const response = await fetch(`${BASE_URL}/reviews?authorId=${authorId}`);
+      if (!response.ok) {
+          throw new Error("Failed to fetch reviews");
+      }
+      const data = await response.json();
+      return data.reviews;
+  } catch (error) {
+      throw error;
+  }
+}
 
 export async function createReview(name, content, rating, date = null) {
   console.log("Review details", name, content, rating, date);
