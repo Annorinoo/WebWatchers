@@ -160,9 +160,9 @@ export async function fetchAllAdminWebsites() {
   }
 };
 
-export async function fetchSingleWebsite(websiteId) {
+export async function fetchSingleWebsite(id) {
   try {
-    const response = await fetch(`${BASE_URL}/websites/${websiteId}`, {
+    const response = await fetch(`${BASE_URL}/websites/${id}`, {
       // headers: getHeaders(),
     });
     const result = await response.json();
@@ -188,9 +188,9 @@ export async function createWebsite(name, url, description, image) {
   }
 }
 
-export async function deleteWebsite(websiteId) {
+export async function deleteWebsite(id) {
     try {
-        const response = await fetch (`${BASE_URL}/websites/${websiteId}`, {
+        const response = await fetch (`${BASE_URL}/websites/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -261,15 +261,15 @@ export async function fetchReviewsByAuthorId(authorId) {
   }
 }
 
-export async function createReview(name, content, rating, date = null) {
-  console.log("Review details", name, content, rating, date);
+export async function createReview(name, content, rating, websiteid, date = null) {
+  console.log("Review details", name, content, rating, websiteid, date);
   console.log(getHeaders());
 
   try {
     const response = await fetch(`${BASE_URL}/reviews`, {
       headers: getHeaders(),
       method: 'POST',
-      body: JSON.stringify({name, content, rating, date})
+      body: JSON.stringify({ name, content, rating, websiteid, date})
     });
     const result = await response.json();
     return result;
@@ -277,6 +277,7 @@ export async function createReview(name, content, rating, date = null) {
     console.log('Trouble creating review!', error);
   }
 }
+
 
 export async function deleteReview(reviewId) {
   try {

@@ -61,9 +61,9 @@ reviewsRouter.get("/:websiteName", async (req, res) => {
   }
 });
 
-reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating', 'date'] }), async (req, res, next) => {
+reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating', 'date', 'websiteid'] }), async (req, res, next) => {
   try {
-    const { name, content, rating } = req.body;
+    const { name, content, rating, websiteid } = req.body;
     const { reviewId } = req.params;
     
     // Generate the current date
@@ -82,6 +82,7 @@ reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 
         name,
         content,
         rating,
+        websiteid,
         date, // Use the generated date
       });
 

@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { createReview } from '../API/ajaxHelper';
+import { useParams } from 'react-router-dom';
+
 
 const PostReviewForm = () => {
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(1);
+  const { id } = useParams();
+  const websiteid = id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-        await createReview(
-            name, 
-            content, 
-            rating,
-            );
+      await createReview(name, content, rating, websiteid);
+      console.log(websiteid);
       // Handle the response, e.g., show a success message or handle errors.
     } catch (error) {
       // Handle errors, e.g., show an error message to the user.
@@ -45,4 +46,3 @@ const PostReviewForm = () => {
 };
 
 export default PostReviewForm;
-

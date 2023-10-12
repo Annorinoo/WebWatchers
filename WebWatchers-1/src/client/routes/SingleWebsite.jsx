@@ -10,6 +10,7 @@ const SingleWebsitePage = () => {
   const { id } = useParams();
   const [singleWebsiteDetails, setSingleWebsiteDetails] = useState(null);
 
+
   useEffect(() => {
     // Fetch website details based on the id
     async function fetchDetails() {
@@ -29,10 +30,10 @@ const SingleWebsitePage = () => {
   return (
     <div>
       <SingleWebsiteDetails singleWebsiteDetails={singleWebsiteDetails} />
-    <PostReviewForm />
+      <PostReviewForm/>
       <SingleWebsiteReviews />
     </div>
   );
-};
+}
 
 export default SingleWebsitePage;
