@@ -5,12 +5,12 @@ function getAdminHeaders() {
     const headers ={
         'Content-Type': 'application/json'
     };
-  const currentToken = localStorage.getItem('user-token');
+  const currentToken = JSON.parse(localStorage.getItem('token'));
 
   //console.log("current token", currentToken);
 
   if (currentToken === null) {
-    headers['Authorization'] = 'Bearer' + currentToken;
+    headers['Authorization'] = 'Bearer ' + currentToken;
   }
   return headers;
 }
@@ -19,13 +19,14 @@ function getHeaders() {
   const headers ={
       'Content-Type': 'application/json'
   };
-  const currentToken = localStorage.getItem('user-token');
+  const currentToken = JSON.parse(localStorage.getItem('token'));
 
-  //console.log("current token", currentToken);
+  console.log("current token", currentToken);
 
   if (currentToken !== null) {
-    headers['Authorization'] = 'Bearer' + currentToken;
+    headers['Authorization'] = 'Bearer ' + currentToken;
   } 
+
   return headers;
 }
 
@@ -149,7 +150,7 @@ export async function fetchAllAdminWebsites() {
 export async function fetchSingleWebsite(websiteId) {
   try {
     const response = await fetch(`${BASE_URL}/websites/${websiteId}`, {
-      headers: getHeaders(),
+      // headers: getHeaders(),
     });
     const result = await response.json();
     return result;
@@ -233,21 +234,20 @@ export async function fetchSingleReview(reviewId) {
   }
 };
 
-export async function createReview(name, content, rating, date) {
-  const sendData = {
-    review: {name: name, content: content, rating: rating, date: date}
-  }
+export async function createReview(name, content, rating, date = null) {
+  console.log("Review details", name, content, rating, date);
+  console.log(getHeaders());
 
   try {
     const response = await fetch(`${BASE_URL}/reviews`, {
       headers: getHeaders(),
       method: 'POST',
-      body: JSON.stringify(sendData)
+      body: JSON.stringify({name, content, rating, date})
     });
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Trouble creating review!', error);
+    console.log('Trouble creating review!', error);
   }
 }
 

@@ -61,42 +61,7 @@ reviewsRouter.get("/:websiteName", async (req, res) => {
   }
 });
 
-// Ann's reviewsRouter.post
-// reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating', 'date', 'websiteName'] }), async (req, res, next) => {
-//   try {
-//       const { name, content, rating, date, websiteName } = req.body;
-
-//       // Assuming you have user authentication in place, get the user's ID from the authentication data.
-//       const authorId = req.user.id; // Replace with the actual way you get the user's ID.
-
-//       // Determine the website ID based on the website name in the request body.
-//       // You can perform a database query to find the website ID.
-//       const websiteId = await getWebsiteIdByName(websiteName); // Implement this function to fetch the website ID.
-
-//       if (!websiteId) {
-//           // Handle the case where the website name doesn't exist in the database.
-//           return res.status(404).json({ message: 'Website not found' });
-//       }
-
-//       // Create the review with the retrieved authorid and websiteid.
-//       const createdReview = await createReview({ authorid: authorId, websiteid: websiteId, name, content, rating, date });
-
-//       if (createdReview) {
-//           res.send(createdReview);
-//       } else {
-//           next({
-//               name: 'FailedToCreate',
-//               message: 'There was an error creating your review'
-//           });
-//       }
-//   } catch (error) {
-//       // Log the error to help diagnose any issues.
-//       console.error(error);
-//       next(error);
-//   }
-// });
-
-reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating'] }), async (req, res, next) => {
+reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating', 'date'] }), async (req, res, next) => {
   try {
     const { name, content, rating } = req.body;
     const { reviewId } = req.params;

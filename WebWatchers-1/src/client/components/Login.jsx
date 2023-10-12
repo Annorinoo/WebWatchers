@@ -26,7 +26,7 @@ const Login = () => {
             console.log(error, 'Message')
             setPasswordErrorMessage("Username or password incorrect. Please try again");
         } else {
-            localStorage.setItem('token', response.token);
+            localStorage.setItem('token', JSON.stringify(response.token));
             setIsLoggedIn(true);
         }
     }

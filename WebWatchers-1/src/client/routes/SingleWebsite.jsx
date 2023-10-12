@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SingleWebsiteDetails from "../components/SingleWebsiteDetails";
 import SingleWebsiteReviews from "../components/SingleWebsiteReviews"; // Import the component for reviews
+import PostReviewForm from "../components/PostReviewForm";
 import { fetchSingleWebsite } from "../API/ajaxHelper";
 import "../Style/SingleWebsite.css";
-import PostReviewForm from "../components/PostReviewForm";
 
 const SingleWebsitePage = () => {
   const { id } = useParams();
@@ -29,7 +29,7 @@ const SingleWebsitePage = () => {
   return (
     <div>
       <SingleWebsiteDetails singleWebsiteDetails={singleWebsiteDetails} />
-      <PostReviewForm websiteId={id} />
+    <PostReviewForm />
       <SingleWebsiteReviews />
     </div>
   );
