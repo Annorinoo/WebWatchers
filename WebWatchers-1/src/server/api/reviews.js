@@ -137,7 +137,7 @@ reviewsRouter.patch('/:id', requireUser, requiredNotSent({ requiredParams: ['nam
 });
 
 
-reviewsRouter.delete('/:reviewId', requireUser, async (req, res, next) => {
+reviewsRouter.delete('/:id', requireUser, async (req, res, next) => {
   try {
     const reviewToUpdate = await getReviewById(req.params.reviewId);
     console.log('review to update', reviewToUpdate);
