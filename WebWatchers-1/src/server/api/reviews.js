@@ -96,31 +96,44 @@ reviewsRouter.get("/:websiteName", async (req, res) => {
 //   }
 // });
 
-reviewsRouter.post('/', requireUser, requiredNotSent({requiredParams: ['name', 'content', 'rating', 'date']}), async (req, res, next) => {
+reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating'] }), async (req, res, next) => {
   try {
-    const {name, content, rating, date} = req.body;
-    const {reviewId} = req.params;
+    const { name, content, rating } = req.body;
+    const { reviewId } = req.params;
+    
+    // Generate the current date
+    const date = new Date().toISOString();
+    
     const existingReview = await getReviewById(reviewId);
-    if(existingReview) {
+
+    if (existingReview) {
       next({
         name: 'NotFound',
         message: `A review with Id ${reviewId} already exists`
       });
     } else {
-      const createdReview = await createReview({authorid: req.user.id, name, content, rating, date});
-      if(createdReview) {
+      const createdReview = await createReview({
+        authorid: req.user.id,
+        name,
+        content,
+        rating,
+        date, // Use the generated date
+      });
+
+      if (createdReview) {
         res.send(createdReview);
       } else {
         next({
           name: 'FailedToCreate',
           message: 'There was an error creating your review'
-        })
+        });
       }
     }
   } catch (error) {
     next(error);
   }
 });
+
 
 
 reviewsRouter.patch('/:reviewId', requireUser, requiredNotSent({requiredParams: ['name', 'content', 'rating', 'date'], atLeastOne: true}), async (req, res, next) => {

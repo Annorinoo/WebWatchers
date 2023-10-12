@@ -1,13 +1,13 @@
-// v1.0
 // import React, { useState, useEffect } from "react";
 // import { fetchAllReviews, deleteReview } from "../API/ajaxHelper";
-// // import "../Style/Reviews.css";
 
-// export default function Reviews() {
+// export default function Reviews( user, setLoggedIn) {
 //     const [reviews, setReviews] = useState([]);
 //     const [thumbsUp, setThumbsUp] = useState({});
 //     const [thumbsDown, setThumbsDown] = useState({});
-//     const [searchQuery, setSearchQuery] = useState(""); // Step 1: Add state for the search query
+//     const token = localStorage.getItem('token');
+//     const user = jwt_decode('token');
+//     const [searchQuery, setSearchQuery] = useState("");
 
 //     useEffect(() => {
 //         async function allReviewsHandler() {
@@ -22,7 +22,7 @@
 //                 result.reviews.forEach((review) => {
 //                     initialThumbsUpState[review.id] = 0;
 //                     initialThumbsDownState[review.id] = 0;
-//                 });
+//                 });                
 
 //                 setThumbsUp(initialThumbsUpState);
 //                 setThumbsDown(initialThumbsDownState);
@@ -33,22 +33,80 @@
 //         allReviewsHandler();
 //     }, []);
 
-//     const handleThumbsUp = (reviewId) => {
+//     const handleThumbsUp = (reviewId, token) => {
+//         if (!setLoggedIn) {
+//             // User not logged in, show a message or prevent voting
+//             alert("You must be logged in to vote.");
+//             return;
+//         }
+
+//         if (hasUserVoted(user.id, reviewId, "thumbsUp")) {
+//             // User has already voted, show a message or prevent voting
+//             alert("You have already voted on this review.");
+//             return;
+//         }
+
 //         setThumbsUp((prevThumbsUp) => ({
 //             ...prevThumbsUp,
 //             [reviewId]: prevThumbsUp[reviewId] + 1,
 //         }));
+
+//         // Remember that the user has voted on this review
+//         markUserVoted(user.id, reviewId, "thumbsUp");
 //     };
 
 //     const handleThumbsDown = (reviewId) => {
+//         if (!setLoggedIn) {
+//             // User not logged in, show a message or prevent voting
+//             alert("You must be logged in to vote.");
+//             return;
+//         }
+
+//         if (hasUserVoted(user.id, reviewId, "thumbsDown")) {
+//             // User has already voted, show a message or prevent voting
+//             alert("You have already voted on this review.");
+//             return;
+//         }
+
 //         setThumbsDown((prevThumbsDown) => ({
 //             ...prevThumbsDown,
 //             [reviewId]: prevThumbsDown[reviewId] + 1,
 //         }));
+
+//         // Remember that the user has voted on this review
+//         markUserVoted(user.id, reviewId, "thumbsDown");
 //     };
 
+//     // Helper functions to check and record user votes
+//     function hasUserVoted(userId, reviewId, voteType) {
+//         // Retrieve the user's votes from local storage
+//         const userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
+
+//         // Check if the user has voted for the specified review and vote type
+//         if (userVotes[userId] && userVotes[userId][reviewId]) {
+//             return userVotes[userId][reviewId] === voteType;
+//         }
+
+//         return false;
+//     }
+
+//     function markUserVoted(userId, reviewId, voteType) {
+//         // Retrieve the user's votes from local storage
+//         const userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
+
+//         // Create a new vote entry for the user if it doesn't exist
+//         if (!userVotes[userId]) {
+//             userVotes[userId] = {};
+//         }
+
+//         // Mark that the user has voted for the specified review and vote type
+//         userVotes[userId][reviewId] = voteType;
+
+//         // Store the updated user votes in local storage
+//         localStorage.setItem("userVotes", JSON.stringify(userVotes));
+//     }
+
 //     const renderAllReviews = () => {
-//         // Step 2: Modify this function to filter reviews based on the search query
 //         const filteredReviews = reviews.filter((review) =>
 //             review.name.toLowerCase().includes(searchQuery.toLowerCase())
 //         );
@@ -72,11 +130,11 @@
 //         ));
 //     };
 
-//     async function handleDelete(reviewId) {
+//     async function handleDelete(reviewId, token) {
 //         try {
-//             await deleteReview(reviewId);
+//             await deleteReview(reviewId, token);
 //             const updatedReviews = await fetchAllReviews();
-//             setReviews(updatedReviews.reviews);
+//             setReviews(updatedReviews);
 //         } catch (error) {
 //             console.error(error);
 //         }
@@ -88,19 +146,18 @@
 //                 type="text"
 //                 placeholder="Search reviews"
 //                 value={searchQuery}
-//                 onChange={(e) => setSearchQuery(e.target.value)} // Step 4: Attach onChange event handler
+//                 onChange={(e) => setSearchQuery(e.target.value)}
 //             />
 //             {renderAllReviews()}
 //         </div>
 //     );
 // }
 
-//v1.1
 import React, { useState, useEffect } from "react";
-import { fetchAllReviews, deleteReview } from "../API/ajaxHelper";
-// import "../Style/Reviews.css";
+import { fetchAllReviews } from "../API/ajaxHelper";
+import jwt_decode from "jwt-decode"; // Make sure to import jwt_decode
 
-export default function Reviews({ user }) {
+export default function Reviews(user, setLoggedIn) {
     const [reviews, setReviews] = useState([]);
     const [thumbsUp, setThumbsUp] = useState({});
     const [thumbsDown, setThumbsDown] = useState({});
@@ -112,7 +169,6 @@ export default function Reviews({ user }) {
                 const result = await fetchAllReviews();
                 setReviews(result.reviews);
 
-                // Initialize the thumbs up and thumbs down state for each review
                 const initialThumbsUpState = {};
                 const initialThumbsDownState = {};
 
@@ -131,14 +187,12 @@ export default function Reviews({ user }) {
     }, []);
 
     const handleThumbsUp = (reviewId) => {
-        if (!user) {
-            // User not logged in, show a message or prevent voting
+        if (!setLoggedIn) {
             alert("You must be logged in to vote.");
             return;
         }
 
         if (hasUserVoted(user.id, reviewId, "thumbsUp")) {
-            // User has already voted, show a message or prevent voting
             alert("You have already voted on this review.");
             return;
         }
@@ -148,19 +202,16 @@ export default function Reviews({ user }) {
             [reviewId]: prevThumbsUp[reviewId] + 1,
         }));
 
-        // Remember that the user has voted on this review
         markUserVoted(user.id, reviewId, "thumbsUp");
     };
 
     const handleThumbsDown = (reviewId) => {
-        if (!user) {
-            // User not logged in, show a message or prevent voting
+        if (!setLoggedIn) {
             alert("You must be logged in to vote.");
             return;
         }
 
         if (hasUserVoted(user.id, reviewId, "thumbsDown")) {
-            // User has already voted, show a message or prevent voting
             alert("You have already voted on this review.");
             return;
         }
@@ -170,15 +221,10 @@ export default function Reviews({ user }) {
             [reviewId]: prevThumbsDown[reviewId] + 1,
         }));
 
-        // Remember that the user has voted on this review
         markUserVoted(user.id, reviewId, "thumbsDown");
     };
 
-    // Helper functions to check and record user votes
-    const hasUserVoted = (userId, reviewId, voteType) => {
-        // You can implement this logic using local storage or a server-side database
-        // For example, you can store user votes in local storage as a JSON object
-        // and check if the user has already voted for a specific review.
+    function hasUserVoted(userId, reviewId, voteType) {
         const userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
 
         if (userVotes[userId] && userVotes[userId][reviewId]) {
@@ -186,11 +232,9 @@ export default function Reviews({ user }) {
         }
 
         return false;
-    };
+    }
 
-    const markUserVoted = (userId, reviewId, voteType) => {
-        // You can implement this logic to record user votes in local storage
-        // or send a request to the server to update the user's vote in a database.
+    function markUserVoted(userId, reviewId, voteType) {
         const userVotes = JSON.parse(localStorage.getItem("userVotes")) || {};
 
         if (!userVotes[userId]) {
@@ -198,8 +242,9 @@ export default function Reviews({ user }) {
         }
 
         userVotes[userId][reviewId] = voteType;
+
         localStorage.setItem("userVotes", JSON.stringify(userVotes));
-    };
+    }
 
     const renderAllReviews = () => {
         const filteredReviews = reviews.filter((review) =>
@@ -219,21 +264,10 @@ export default function Reviews({ user }) {
                     <button onClick={() => handleThumbsDown(review.id)}>
                         Thumbs Down ({thumbsDown[review.id]})
                     </button>
-                    <button onClick={() => handleDelete(review.id)}>Delete</button>
                 </div>
             </div>
         ));
     };
-
-    async function handleDelete(reviewId) {
-        try {
-            await deleteReview(reviewId);
-            const updatedReviews = await fetchAllReviews();
-            setReviews(updatedReviews.reviews);
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     return (
         <div className="all-reviews">

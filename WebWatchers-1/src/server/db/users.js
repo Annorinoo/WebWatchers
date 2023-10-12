@@ -81,6 +81,16 @@ async function getAllUsers() {
     }
 }
 
+const getUserByInfo = async () => {
+    try {
+      const { rows } = await db.query(`
+        SELECT * FROM users;
+      `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 module.exports = {
     createUser,
@@ -88,4 +98,5 @@ module.exports = {
     getUserByUsername,
     getUserById,
     getAllUsers,
+    getUserByInfo
 };

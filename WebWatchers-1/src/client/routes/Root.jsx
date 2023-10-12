@@ -105,7 +105,7 @@ export default function Root() {
                 <nav className="headerLink">
                 <div style={{ ...navbarStyles, top: visible ? '0' : '-60px' }}>
                 <div className='navbar'>
-                    <Link to="WebsiteListings" className="linkStyle">Homepage</Link>
+                    <Link to="Websites" className="linkStyle">Homepage</Link>
                     <Link to="Reviews" className="linkStyle">Reviews</Link>
                     {token ? <Link to="profile" className="linkStyle">Profile</Link> : null}
                     {!token && (

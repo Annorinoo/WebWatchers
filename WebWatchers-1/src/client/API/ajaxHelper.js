@@ -1,41 +1,42 @@
 const BASE_URL = "http://localhost:3000/api";
 
+
 function getAdminHeaders() {
-  const headers ={
-      'Content-Type': 'application/json'
-  };
-const currentToken = localStorage.getItem('user-token');
+    const headers ={
+        'Content-Type': 'application/json'
+    };
+  const currentToken = localStorage.getItem('user-token');
 
-//console.log("current token", currentToken);
+  //console.log("current token", currentToken);
 
-if (currentToken === null) {
-  headers['Authorization'] = 'Bearer' + currentToken;
-}
-return headers;
+  if (currentToken === null) {
+    headers['Authorization'] = 'Bearer' + currentToken;
+  }
+  return headers;
 }
 
 function getHeaders() {
-const headers ={
-    'Content-Type': 'application/json'
-};
-const currentToken = localStorage.getItem('user-token');
+  const headers ={
+      'Content-Type': 'application/json'
+  };
+  const currentToken = localStorage.getItem('user-token');
 
-//console.log("current token", currentToken);
+  //console.log("current token", currentToken);
 
-if (currentToken !== null) {
-  headers['Authorization'] = 'Bearer' + currentToken;
-} 
-return headers;
+  if (currentToken !== null) {
+    headers['Authorization'] = 'Bearer' + currentToken;
+  } 
+  return headers;
 }
 
 export async function fetchAllUsers() {
-  try {
-     const response = await fetch(`${BASE_URL}/users`);
-     const users = await response.json();
-     return users;
-  } catch (error) {
-      console.error('Trouble fetching users!', error);
-  }
+    try {
+       const response = await fetch(`${BASE_URL}/users`);
+       const users = await response.json();
+       return users;
+    } catch (error) {
+        console.error('Trouble fetching users!', error);
+    }
 } 
 
 export async function fetchAllAdminUsers() {
@@ -78,7 +79,6 @@ export async function registerUser(username, password) {
   } catch (error) {
       console.error('Could not register', error);
   }
-
 }
 
 export async function userLogin(username, password) {
@@ -124,7 +124,7 @@ export async function adminLogin({username, password, secret}) {
 export async function fetchAllWebsites() {
     try {
       const response = await fetch(`${BASE_URL}/websites`, {
-        // headers: getHeaders(),
+        //headers: getHeaders(),
       });
       const result = await response.json();
       return result;
@@ -149,6 +149,7 @@ export async function fetchAllAdminWebsites() {
 export async function fetchSingleWebsite(websiteId) {
   try {
     const response = await fetch(`${BASE_URL}/websites/${websiteId}`, {
+      headers: getHeaders(),
     });
     const result = await response.json();
     return result;
@@ -173,45 +174,45 @@ export async function createWebsite(name, url, description, image) {
   }
 }
 
-// needs to also have an authorid param with websiteId
 export async function deleteWebsite(websiteId) {
-  try {
-      const response = await fetch (`${BASE_URL}/websites/${websiteId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+    try {
+        const response = await fetch (`${BASE_URL}/websites/${websiteId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error ('Could not delete website', error);
+    }
+}
+
+export async function editWebsite(name, description, url, image) {
+    const sendData = {
+      website: {name: name, description: description, url: url, image: image},
+    };
+  
+    try {
+      const response = await fetch(`${BASE_URL}/websites/${websiteId}`, {
+        method: 'PATCH', 
+        headers: getHeaders(),
+        body: JSON.stringify(sendData),
       });
       const result = await response.json();
       return result;
-  } catch (error) {
-      console.error ('Could not delete website', error);
-  }
-}
-
-// emily, I tried passing the authorId param here, I'm not sure if I structured it correctly but wanted to know your thoughts. 
-export async function editWebsite(name, description, url, image) {
-  const sendData = {
-    website: {name: name, description: description, url: url, image: image},
-  };
-
-  try {
-    const response = await fetch(`${BASE_URL}/websites/${websiteId}`, {
-      method: 'PATCH', 
-      headers: getHeaders(),
-      body: JSON.stringify(sendData),
-    });
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Could not edit website', error);
-  }
+    } catch (error) {
+      console.error('Could not edit website', error);
+    }
 }
 
 export async function fetchAllReviews() {
   try {
     const response = await fetch(`${BASE_URL}/reviews`, {
-      // headers: getHeaders(),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
     const result = await response.json();
     return result;
@@ -220,11 +221,10 @@ export async function fetchAllReviews() {
   }
 }
 
-
 export async function fetchSingleReview(reviewId) {
   try {
     const response = await fetch(`${BASE_URL}/reviews/${reviewId}`, {
-      // headers: getHeaders(),
+      headers: getHeaders(),
     });
     const result = await response.json();
     return result;
@@ -232,42 +232,6 @@ export async function fetchSingleReview(reviewId) {
     console.error('Trouble fetching the review!', error);
   }
 };
-
-export async function fetchWebsiteReviews(websiteId) {
-  try {
-    const response = await fetch(`${BASE_URL}/reviews/${websiteId}`);
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch reviews: ${response.status}`);
-    }
-    
-    const reviews = await response.json();
-    return reviews;
-  } catch (error) {
-    console.error("Error fetching website reviews:", error);
-    throw error;
-  }
-}
-
-export async function fetchUserReview(websiteId) {
-  try {
-    const response = await fetch(`${BASE_URL}/reviews/user-review?websiteId=${websiteId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch user's review: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    throw new Error(`Error fetching user's review: ${error.message}`);
-  }
-}
 
 export async function createReview(name, content, rating, date) {
   const sendData = {

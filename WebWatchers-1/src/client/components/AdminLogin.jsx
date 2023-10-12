@@ -1,44 +1,44 @@
-import '../Style/Login.css'
-import { useState,} from "react";
-import { userLogin } from "../API/ajaxHelper";
-import { useOutletContext, Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { adminLogin } from '../API/ajaxHelper'
 
-const Login = () => {
+export default function LogInForm({ setAdminLoggedIn, setUser, adminLoggedIn }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [secret, setSecret] = useState('');
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useOutletContext();
-
     const navigate = useNavigate();
 
-    async function submitLogin(e) {
-        e.preventDefault();
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-        const user = {
-                username,
-                password,
+        const admin = {
+            username,
+            password,
+            secret,
         };
 
-        const response = await userLogin(user);
+        const response = await adminLogin(admin);
 
-        if (response.error) {
-            console.log(error, 'Message')
-            setPasswordErrorMessage("Username or password incorrect. Please try again");
+        if(response.error) {
+            console.log("Message: ", error);
+            setPasswordErrorMessage("Username, password, or secret key incorrect. Please try again.");
         } else {
             localStorage.setItem('token', response.token);
-            setIsLoggedIn(true);
-        }
+            setAdminLoggedIn(true);
+            setUser(true);
+        } navigate("/admin/websites");
     }
+
 
     return (
         <div className="panel" id="Center">
-            {isLoggedIn ? (
+            {adminLoggedIn ? (
                 <h1>Welcome Back!</h1>
             ) : (
                 <>
                     <h1 className='Header' id="CenterText">Log In</h1>
-                    <form className='LoginBox' onSubmit={submitLogin}>
+                    <form className='LoginBox' onSubmit={handleSubmit}>
                         <input
                             type="text"
                             value={username}
@@ -54,13 +54,19 @@ const Login = () => {
                                 setPasswordErrorMessage('');
                             }}
                         />
+                        <input
+                            type="password"
+                            value={secret}
+                            placeholder="Secret Key"
+                            onChange={(e) => {
+                                setSecret(e.target.value);
+                            }}
+                        />
                         {passwordErrorMessage && <p>{passwordErrorMessage}</p>}
                         <button type="submit" className="submitButton">Log In</button>
                     </form>
-                    <Link to="/AdminLogin" className="adminLink" id="CenterText">Click here for admin login</Link>
                 </>
             )}
         </div>
     );
 };
-export default Login;

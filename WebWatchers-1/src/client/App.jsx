@@ -1,72 +1,48 @@
-// import './App.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Root from "./routes/Root.jsx";
-// import HomePage from './routes/HomePage.jsx'; 
-import WebsiteListings from './routes/WebsiteListings.jsx';
-import Profile from './routes/Profile.jsx';
-import Register from "./routes/Register.jsx"; 
-import Login from "./routes/Login.jsx"; 
-import SingleWebsite from './routes/SingleWebsite.jsx';
-import AdminLogin from './routes/adminLogin.jsx';
-import ReviewList from './routes/Reviews.jsx';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    children: [
-      // {
-      //   path: "HomePage",
-      //   element: <HomePage />,
-      // },
-      {
-        path: "WebsiteListings", // Updated path
-        element: <WebsiteListings />,
-      },
-      {
-        path: "websites/:id", // Updated path
-        element: <SingleWebsite />,
-        // children: [
-        //   // Add routes for posting and editing reviews here
-        //   {
-        //     path: "post-review",
-        //     element: <PostReviewForm />,
-        //   },
-        //   {
-        //     path: "edit-review",
-        //     element: <EditReviewForm />,
-        //   },
-        // ],
-      },
-      {
-        path: "Profile",
-        element: <Profile />,
-      }, 
-      {
-        path: "Register",
-        element: <Register />,
-      },
-      {
-        path: "Login",
-        element: <Login />,
-      },
-      {
-        path: "Reviews",
-        element: <ReviewList />,
-      },
-      {
-        path: "AdminLogin",
-        element: <AdminLogin />,
-      },
-    ],
-  },
-]);
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom'; // Import BrowserRouter as Router
+import Main from './routes/Main';
+import Navbar from './components/Navbar';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [user, setUser] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('user token');
+    if (token) {
+      // If a token is present, the user is logged in
+      setLoggedIn(true);
+      // If a token is present, an admin is logged in
+      setAdminLoggedIn(true);
+      // Get the user's username
+      const username = localStorage.getItem('username');
+      setUser(username);
+    }
+    setIsLoading(false);
+  }, [user]);
+
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
+    <Router>
+      <div>
+        <Navbar 
+          loggedIn={loggedIn} 
+          setLoggedIn={setLoggedIn}
+          setUser={setUser} 
+          adminLoggedIn={adminLoggedIn}
+          setAdminLoggedIn={setAdminLoggedIn}
+        />
+        <Main
+          setLoggedIn={setLoggedIn}
+          setUser={setUser}
+          loggedIn={loggedIn}
+          user={user}
+          adminLoggedIn={adminLoggedIn}
+          setAdminLoggedIn={setAdminLoggedIn}
+        />
+      </div>
+    </Router>
   );
 }
 

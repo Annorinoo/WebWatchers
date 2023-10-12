@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { deleteWebsite, fetchAllAdminWebsites } from "../API/ajaxHelpes"
+import { deleteWebsite, fetchAllAdminWebsites } from "../API/ajaxHelper"
 
 export default function AdminWebsites(adminLoggedIn) {
     const [websites, setWebsites] = useState([]);
