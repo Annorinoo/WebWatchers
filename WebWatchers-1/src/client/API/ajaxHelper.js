@@ -291,20 +291,37 @@ export async function deleteReview(reviewId) {
   }
 }
 
-export async function editReview(name, content, rating, date) {
-  const sendData = {
-    review: {name: name, content: content, rating: rating, date: date},
-  };
+export async function editReview(id, name, content, rating, date) {
+  console.log("Review details", name, content, rating, date);
+  console.log(getHeaders());
 
   try {
-    const response = await fetch(`${BASE_URL}/reviews/${websiteId}`, {
-      method: 'PATCH', 
+    const response = await fetch(`${BASE_URL}/reviews/${id}`, {
       headers: getHeaders(),
-      body: JSON.stringify(sendData),
+      method: 'PATCH',
+      body: JSON.stringify({ name, content, rating, date })
     });
     const result = await response.json();
     return result;
   } catch (error) {
-    console.error('Could not edit website', error);
+    console.log('Trouble editing review!', error);
   }
 }
+
+
+
+/* export async function createWebsite(name, url, description, image) {
+  console.log("website details", name, url, description, image);
+  try {
+    const response = await fetch(`${BASE_URL}/admin/websites`, {
+      headers: getAdminHeaders(),
+      method: 'POST',
+      body: JSON.stringify({name, url, description, image})
+    });
+    console.log("ajax create website", response);
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Trouble creating website!', error);
+  }
+} */

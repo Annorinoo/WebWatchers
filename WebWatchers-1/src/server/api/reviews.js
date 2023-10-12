@@ -101,41 +101,41 @@ reviewsRouter.post('/', requireUser, requiredNotSent({ requiredParams: ['name', 
 
 
 
-reviewsRouter.patch('/:reviewId', requireUser, requiredNotSent({requiredParams: ['name', 'content', 'rating', 'date'], atLeastOne: true}), async (req, res, next) => {
+reviewsRouter.patch('/:id', requireUser, requiredNotSent({ requiredParams: ['name', 'content', 'rating', 'date'], atLeastOne: true }), async (req, res, next) => {
   try {
-    const {name, content, rating, date} = req.body;
-    const {reviewId} = req.params;
-    const reviewToUpdate = await getReviewById(reviewId);
-    if(!reviewToUpdate) {
+    const { name, content, rating, date } = req.body;
+    const { id } = req.params; // Change variable name to 'id'
+    const reviewToUpdate = await getReviewById(id);
+    if (!reviewToUpdate) {
       next({
         name: 'NotFound',
-        message: `No review by ID ${reviewId}`
-      })
+        message: `No review by ID ${id}` // Change variable name to 'id'
+      });
 
-      console.log(reviewId);
-
-    } else if(req.user.id !== reviewToUpdate.authorid) {
+      console.log(id); // Change variable name to 'id'
+    } else if (req.user.id !== reviewToUpdate.authorid) {
       res.status(403);
       next({
         name: "WrongUserError",
         message: "You must be the same user who created this review to perform this action"
       });
     } else {
-      const updatedReview = await updateReview({reviewId, authorid: req.user.id, name, content, rating, date});
-      if(updatedReview) {
+      const updatedReview = await updateReview({ id, authorid: req.user.id, name, content, rating, date }); // Change variable name to 'id'
+      if (updatedReview) {
         res.send(updatedReview);
       } else {
         next({
           name: 'FailedToUpdate',
           message: 'There was an error updating your review'
-        })
+        });
       }
     }
   } catch (error) {
-    console.log("updating review error", error);
+    console.log("Updating review error", error);
     next(error);
   }
 });
+
 
 reviewsRouter.delete('/:reviewId', requireUser, async (req, res, next) => {
   try {

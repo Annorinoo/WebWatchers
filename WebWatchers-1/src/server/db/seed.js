@@ -10,10 +10,10 @@ const { getAllUsers } = require('./users')
 const dropTables = async () => {
   try {
       await db.query(`
-      DROP TABLE IF EXISTS reviews;
-      DROP TABLE IF EXISTS websites;
-      DROP TABLE IF EXISTS admin;
-      DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS reviews CASCADE;
+      DROP TABLE IF EXISTS websites CASCADE;
+      DROP TABLE IF EXISTS admin CASCADE;
+      DROP TABLE IF EXISTS users CASCADE;
       `)
   }
   catch(err) {
