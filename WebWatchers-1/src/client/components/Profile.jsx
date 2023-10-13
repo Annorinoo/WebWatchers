@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchAllReviews, editReview } from "../API/ajaxHelper";
+import { deleteReview } from "../API/ajaxHelper";
 import jwt_decode from 'jwt-decode';
 
 export default function Profile() {
@@ -61,6 +62,17 @@ export default function Profile() {
     }
   };
 
+  const handleDelete = async (reviewId) => {
+    try {
+      await deleteReview(reviewId);
+      const updatedReviews = reviews.filter((reviews) => 
+      review.id !== reviewId);
+      setReviews(updateReviews);
+    } catch (error) {
+      console.error("Error deletinng reviews:", error);
+    }
+  }
+
   const renderReviews = () => {
     if (reviews.length > 0) {
       return (
@@ -107,6 +119,7 @@ export default function Profile() {
                     <p>Rating: {review.rating}</p>
                     <p>Date: {new Date(review.date).toLocaleDateString()}</p>
                     <button onClick={() => handleEdit(review.id)}>Edit</button>
+                    <button onClick={() => handleDelete(review.id)}>Delete</button>
                   </div>
                 )}
               </li>
